@@ -1,1 +1,11 @@
-ai2thor
+ai2thor==4.0.0
+torch
+torchvision
+transformers
+datasets
+huggingface_hub[cli]
+bitsandbytes
+accelerate
+scipy
+sentencepiece
+protobuf
