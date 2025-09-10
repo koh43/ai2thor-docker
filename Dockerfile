@@ -3,8 +3,11 @@ ARG CUDA_VERSION=12.8
 FROM nvidia/cuda:$CUDA_VERSION.1-devel-ubuntu22.04
 ARG NVIDIA_VERSION
 
+ENV NVIDIA_DRIVER_CAPABILITIES=all
+ENV NVIDIA_VISIBLE_DEVICES=all
+
 ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get update && apt-get -y install python3-pip libglib2.0-0 libvulkan1 libvulkan-dev vulkan-tools python3-venv vim pciutils wget git kmod vim git
+RUN apt-get update && apt-get -y install python3-pip libglib2.0-0 libvulkan1 libvulkan-dev vulkan-tools ffmpeg python3-venv vim pciutils wget git kmod vim git mesa-utils
 
 ENV APP_HOME=/app
 WORKDIR $APP_HOME
