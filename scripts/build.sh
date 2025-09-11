@@ -9,12 +9,16 @@ if  ! type "docker" 2> /dev/null > /dev/null ; then
     exit 1
 fi;
 
-NVIDIA_VERSION=`cat /proc/driver/nvidia/version | grep 'NVRM version:'| grep -oE "Kernel Module\s+[0-9.]+"| awk {'print $3'}` 
-NVIDIA_MAJOR=`echo $NVIDIA_VERSION | tr "." "\n" | head -1  | tr -d "\n"`
-NVIDIA_MINOR=`echo $NVIDIA_VERSION | tr "." "\n" | head -2  | tail -1| tr -d "\n"`
+NVIDIA_VERSION=$(cat /proc/driver/nvidia/version | awk '/NVRM version:/ { for(i=1;i<=NF;i++) if($i ~ /^[0-9]+\.[0-9]+\.[0-9]+$/) print $i }')
+NVIDIA_MAJOR=$(echo $NVIDIA_VERSION | tr "." "\n" | head -1  | tr -d "\n")
+NVIDIA_MINOR=$(echo $NVIDIA_VERSION | tr "." "\n" | head -2  | tail -1| tr -d "\n")
+
+echo "DEBUG: NVIDIA_VERSION=$NVIDIA_VERSION"
+echo "DEBUG: NVIDIA_MAJOR=$NVIDIA_MAJOR"
+echo "DEBUG: NVIDIA_MINOR=$NVIDIA_MINOR"
 
 # https://docs.nvidia.com/deploy/cuda-compatibility/index.html#binary-compatibility__table-toolkit-driver
-if (( $NVIDIA_MAJOR >= 580 && $NVIDIA_MINOR >= 82 )); then
+if (( $NVIDIA_MAJOR >= 570 && $NVIDIA_MINOR >= 00 )); then
     CUDA_VERSION=12.8
 elif (( $NVIDIA_MAJOR >= 470 && $NVIDIA_MINOR >= 42 )); then
     CUDA_VERSION=11.4.2
